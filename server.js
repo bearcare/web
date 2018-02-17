@@ -1,19 +1,35 @@
-const express = require("express");
-const path = require("path");
-const PORT = process.env.PORT || 3001;
-const app = express();
+var express = require("express");
+var bodyParser = require("body-parser");
+var logger = require("morgan");
+var mongoose = require("mongoose");
 
-// Serve up static assets (usually on heroku)
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("client/build"));
-}
+// Require all models
+// var db = require("./models");
 
-// Send every request to the React app
-// Define any API routes before this runs
-app.get("*", function(req, res) {
-  res.sendFile(path.join(__dirname, "./client/build/index.html"));
-});
+var PORT = process.env.PORT || 3000;;
 
+// Initialize Express
+var app = express();
+
+// Configure middleware
+
+// Use morgan logger for logging requests
+app.use(logger("dev"));
+// Use body-parser for handling form submissions
+app.use(bodyParser.urlencoded({ extended: false }));
+// Use express.static to serve the public folder as a static directory
+app.use(express.static("public"));
+
+
+// Set mongoose to leverage built in JavaScript ES6 Promises
+// Connect to the Mongo DB
+// mongoose.Promise = Promise;
+// var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/bearcare";
+// mongoose.connect(MONGODB_URI, {
+//   useMongoClient: true
+// });
+
+// Start the server
 app.listen(PORT, function() {
-  console.log(`🌎 ==> Server now on port ${PORT}!`);
+  console.log("App running on port " + PORT + "!");
 });
